@@ -11,7 +11,7 @@ struct Node *Head = NULL;
 struct Node* CreateNode() {
     struct Node *newnode;
     newnode = (struct Node *) malloc(sizeof(struct Node));
-    
+
     printf("Enter data: ");
     scanf("%d", &newnode->data);
     newnode->next = NULL;
@@ -19,18 +19,29 @@ struct Node* CreateNode() {
 }
 
 int countNode(struct Node *Head) {
-    if (Head == NULL)
+    int count = 0;
+    struct Node *temp = Head;
+
+    if(Head == NULL)
         return 0;
-    else
-        return 1 + countNode(Head->next);
+
+    do {
+        count++;
+        temp = temp->next;
+    } while(temp != Head);
+
+    return count;
 }
 
 void CreateList() {
     int ch;
     struct Node *newnode, *temp;
+
     Head = NULL;
+
     do {
         newnode = CreateNode();
+
         if(Head == NULL) {
             Head = temp = newnode;
         }
@@ -41,78 +52,116 @@ void CreateList() {
         newnode->next=Head;
         printf("Enter 1 to continue & 0 to stop: ");
         scanf("%d", &ch);
+
     } while(ch);
-    printf("List created successfully\n");
+
+    printf("Circular linked list created successfully\n");
 }
 
-void Traverse() {
+void Traverse_L2R() {
     struct Node *temp = Head;
+
     if(Head == NULL) {
         printf("The list is empty\n");
         return;
     }
-    else {
-        do{
-            printf("%d ", temp->data);
-            temp = temp->next;
-          }while(temp != NULL) 
-        printf("\n");
-    }
+
+    do {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    } while(temp != Head);
+
+    printf("\n");
+}
+
+void Traverse_R2L(struct Node *temp) {
+    if(temp->next != Head)
+        Traverse_R2L(temp->next);
+
+    printf("%d ", temp->data);
 }
 
 void InsertAtBeginning() {
-    struct Node *newnode;
+    struct Node *newnode, *temp;
+
     newnode = CreateNode();
-    
+
     if(Head == NULL) {
         Head = newnode;
+        newnode->next = Head;
     }
     else {
+        temp = Head;
+
+        while(temp->next != Head) {
+            temp = temp->next;
+        }
+
         newnode->next = Head;
         Head = newnode;
+        temp->next = Head;
     }
 }
 
 void InsertAtEnd() {
     struct Node *newnode, *temp;
+
     newnode = CreateNode();
+
     if(Head == NULL) {
         Head = newnode;
+        newnode->next = Head;
     }
     else {
         temp = Head;
-        while(temp->next != NULL) {
+
+        while(temp->next != Head) {
             temp = temp->next;
         }
+
         temp->next = newnode;
+        newnode->next = Head;
     }
 }
 
 void InsertAtPosition() {
     int pos, count, i;
     struct Node *newnode, *temp;
-    
+
     printf("Enter position: ");
     scanf("%d", &pos);
-    
+
     count = countNode(Head);
-    
-    if (pos >= 1 && pos <= count + 1) {
+
+    if(pos >= 1 && pos <= count + 1) {
+
         newnode = CreateNode();
-        if (pos == 1) {
-            if (Head == NULL) {
+
+        if(pos == 1) {
+
+            if(Head == NULL) {
                 Head = newnode;
+                newnode->next = Head;
             }
             else {
+                temp = Head;
+
+                while(temp->next != Head) {
+                    temp = temp->next;
+                }
+
                 newnode->next = Head;
                 Head = newnode;
+                temp->next = Head;
             }
         }
         else {
             temp = Head;
-            for (i = 1; i < pos - 1; i++) {
+
+            for(i = 1; i < pos - 1; i++) {
                 temp = temp->next;
             }
+
             newnode->next = temp->next;
             temp->next = newnode;
         }
@@ -123,114 +172,164 @@ void InsertAtPosition() {
 }
 
 void DeleteAtBeginning() {
-    struct Node *temp;
+    struct Node *temp, *last;
+
     if(Head == NULL) {
         printf("List is empty\n");
     }
+    else if(Head->next == Head) {
+        free(Head);
+        Head = NULL;
+    }
     else {
         temp = Head;
+        last = Head;
+
+        while(last->next != Head) {
+            last = last->next;
+        }
+
         Head = Head->next;
+        last->next = Head;
+
         free(temp);
     }
 }
 
 void DeleteAtEnd() {
     struct Node *prev, *temp;
+
     if(Head == NULL) {
         printf("List is empty\n");
+    }
+    else if(Head->next == Head) {
+        free(Head);
+        Head = NULL;
     }
     else {
         prev = NULL;
         temp = Head;
-        while(temp->next != NULL) {
+
+        while(temp->next != Head) {
             prev = temp;
             temp = temp->next;
         }
-        if(prev == NULL) {
-            Head = NULL;
-        }
-        else {
-            prev->next = NULL;
-        }
+
+        prev->next = Head;
+
         free(temp);
     }
 }
 
 void DeleteAtPosition() {
     int pos, count, i;
-    struct Node *temp, *ptr;
-    
+    struct Node *temp, *ptr, *last;
+
     printf("Enter position: ");
     scanf("%d", &pos);
-    
+
     if(Head == NULL) {
         printf("List is empty\n");
         return;
     }
-    else {
-        count = countNode(Head);
-        if(pos >= 1 && pos <= count) {
-            if(pos == 1) {
-                temp = Head;
-                Head = Head->next;
-                free(temp);
+
+    count = countNode(Head);
+
+    if(pos >= 1 && pos <= count) {
+
+        if(pos == 1) {
+
+            if(Head->next == Head) {
+                free(Head);
+                Head = NULL;
             }
             else {
                 temp = Head;
-                for(i = 1; i < pos - 1; i++) {
-                    temp = temp->next;
+                last = Head;
+
+                while(last->next != Head) {
+                    last = last->next;
                 }
-                ptr = temp->next;
-                temp->next = ptr->next;
-                free(ptr);
+
+                Head = Head->next;
+                last->next = Head;
+
+                free(temp);
             }
         }
         else {
-            printf("Invalid position\n");
+            temp = Head;
+
+            for(i = 1; i < pos - 1; i++) {
+                temp = temp->next;
+            }
+
+            ptr = temp->next;
+            temp->next = ptr->next;
+
+            free(ptr);
         }
+    }
+    else {
+        printf("Invalid position\n");
     }
 }
 
 int Search(int key) {
     int pos = 1;
     struct Node *temp = Head;
-    
+
     if(Head == NULL) {
-        printf("Empty list");
+        printf("Empty list\n");
         return 0;
     }
-    
-    while(temp != NULL) {
+
+    do {
         if(key == temp->data) {
             return pos;
         }
-        else {
-            temp = temp->next;
-            pos = pos + 1;
-        }
-    }
+
+        temp = temp->next;
+        pos++;
+
+    } while(temp != Head);
+
     return -1;
 }
 
 void Reverse() {
-    struct Node *PrevNode = NULL, *CurrentNode, *NextNode;
-    
-    CurrentNode = NextNode = Head;
-    
-    while(NextNode != NULL) {
-        NextNode = NextNode->next;
-        CurrentNode->next = PrevNode;
-        PrevNode = CurrentNode;
-        CurrentNode = NextNode;
+    struct Node *prev, *current, *next, *last;
+
+    if(Head == NULL || Head->next == Head) {
+        return;
     }
-    
-    Head = PrevNode;
+
+    prev = NULL;
+    current = Head;
+    last = Head;
+
+    while(last->next != Head) {
+        last = last->next;
+    }
+
+    do {
+        next = current->next;
+        current->next = prev;
+        prev = current;
+        current = next;
+
+    } while(current != Head);
+
+    Head->next = prev;
+    Head = prev;
+    last->next = Head;
+
     printf("List reversed successfully\n");
 }
 
 int main() {
     int choice, key, result;
-    
+
     do {
         printf("\n--- MENU ---\n");
         printf("1. Create a list\n");
@@ -245,16 +344,20 @@ int main() {
         printf("10. Searching\n");
         printf("11. Reverse\n");
         printf("12. Exit\n");
+
         printf("Enter your choice: ");
         scanf("%d", &choice);
-        
+
         switch(choice) {
+
             case 1:
                 CreateList();
                 break;
+
             case 2:
                 Traverse_L2R();
                 break;
+
             case 3:
                 if(Head == NULL) {
                     printf("The list is empty\n");
@@ -265,28 +368,37 @@ int main() {
                     printf("\n");
                 }
                 break;
+
             case 4:
                 InsertAtBeginning();
                 break;
+
             case 5:
                 InsertAtEnd();
                 break;
+
             case 6:
                 InsertAtPosition();
                 break;
+
             case 7:
                 DeleteAtBeginning();
                 break;
+
             case 8:
                 DeleteAtEnd();
                 break;
+
             case 9:
                 DeleteAtPosition();
                 break;
+
             case 10:
                 printf("Enter element to search: ");
                 scanf("%d", &key);
+
                 result = Search(key);
+
                 if(result == 0) {
                     printf("\n");
                 }
@@ -296,17 +408,22 @@ int main() {
                 else {
                     printf("Element found at position %d\n", result);
                 }
+
                 break;
+
             case 11:
                 Reverse();
                 break;
+
             case 12:
                 printf("Exiting program\n");
                 break;
+
             default:
                 printf("Invalid choice! Try again\n");
         }
+
     } while(choice != 12);
-    
+
     return 0;
 }
