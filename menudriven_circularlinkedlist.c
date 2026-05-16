@@ -58,7 +58,7 @@ void CreateList() {
     printf("Circular linked list created successfully\n");
 }
 
-void Traverse_L2R() {
+void Traverse() {
     struct Node *temp = Head;
 
     if(Head == NULL) {
@@ -73,57 +73,39 @@ void Traverse_L2R() {
 
     printf("\n");
 }
-
-void Traverse_R2L(struct Node *temp) {
-    if(temp->next != Head)
-        Traverse_R2L(temp->next);
-
-    printf("%d ", temp->data);
-}
-
 void InsertAtBeginning() {
     struct Node *newnode, *temp;
-
     newnode = CreateNode();
-
     if(Head == NULL) {
         Head = newnode;
         newnode->next = Head;
     }
     else {
         temp = Head;
-
         while(temp->next != Head) {
             temp = temp->next;
         }
-
         newnode->next = Head;
         Head = newnode;
         temp->next = Head;
     }
 }
-
 void InsertAtEnd() {
     struct Node *newnode, *temp;
-
     newnode = CreateNode();
-
     if(Head == NULL) {
         Head = newnode;
         newnode->next = Head;
     }
     else {
         temp = Head;
-
         while(temp->next != Head) {
             temp = temp->next;
         }
-
         temp->next = newnode;
         newnode->next = Head;
     }
 }
-
 void InsertAtPosition() {
     int pos, count, i;
     struct Node *newnode, *temp;
@@ -131,25 +113,19 @@ void InsertAtPosition() {
     printf("Enter position: ");
     scanf("%d", &pos);
 
-    count = countNode(Head);
-
+    count = countNode(*Head);
     if(pos >= 1 && pos <= count + 1) {
-
         newnode = CreateNode();
-
         if(pos == 1) {
-
             if(Head == NULL) {
                 Head = newnode;
                 newnode->next = Head;
             }
             else {
                 temp = Head;
-
                 while(temp->next != Head) {
                     temp = temp->next;
                 }
-
                 newnode->next = Head;
                 Head = newnode;
                 temp->next = Head;
@@ -157,11 +133,9 @@ void InsertAtPosition() {
         }
         else {
             temp = Head;
-
             for(i = 1; i < pos - 1; i++) {
                 temp = temp->next;
             }
-
             newnode->next = temp->next;
             temp->next = newnode;
         }
