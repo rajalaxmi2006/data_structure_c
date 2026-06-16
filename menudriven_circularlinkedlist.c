@@ -146,7 +146,7 @@ void InsertAtPosition() {
 }
 
 void DeleteAtBeginning() {
-    struct Node *temp, *last;
+    struct Node *temp, *lastnode;
 
     if(Head == NULL) {
         printf("List is empty\n");
@@ -157,14 +157,14 @@ void DeleteAtBeginning() {
     }
     else {
         temp = Head;
-        last = Head;
+        lastnode = Head;
 
-        while(last->next != Head) {
-            last = last->next;
+        while(lastnode->next != Head) {
+            lastnode = lastnode->next;
         }
 
         Head = Head->next;
-        last->next = Head;
+        lastnode->next = Head;
 
         free(temp);
     }
@@ -197,7 +197,7 @@ void DeleteAtEnd() {
 
 void DeleteAtPosition() {
     int pos, count, i;
-    struct Node *temp, *ptr, *last;
+    struct Node *temp, *ptr, *lastnode;
 
     printf("Enter position: ");
     scanf("%d", &pos);
@@ -219,14 +219,14 @@ void DeleteAtPosition() {
             }
             else {
                 temp = Head;
-                last = Head;
+                lastnode = Head;
 
-                while(last->next != Head) {
-                    last = last->next;
+                while(lastnode->next != Head) {
+                    lastnode = lastnode->next;
                 }
 
                 Head = Head->next;
-                last->next = Head;
+                lastnode->next = Head;
 
                 free(temp);
             }
@@ -272,7 +272,7 @@ int Search(int key) {
 }
 
 void Reverse() {
-    struct Node *prev, *current, *next, *last;
+    struct Node *prev, *current, *next, *lastnode;
 
     if(Head == NULL || Head->next == Head) {
         return;
@@ -280,10 +280,10 @@ void Reverse() {
 
     prev = NULL;
     current = Head;
-    last = Head;
+    lastnode = Head;
 
-    while(last->next != Head) {
-        last = last->next;
+    while(lastnode->next != Head) {
+        lastnode = lastnode->next;
     }
 
     do {
@@ -296,7 +296,7 @@ void Reverse() {
 
     Head->next = prev;
     Head = prev;
-    last->next = Head;
+    lastnode->next = Head;
 
     printf("List reversed successfully\n");
 }
