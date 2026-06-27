@@ -75,7 +75,6 @@ void push()
         stack[top] = data;
     }
 }
-
 void pop()
 {
     if(top == -1)
@@ -88,7 +87,6 @@ void pop()
        top = top - 1; 
     }
 }
-
 void peek()
 {
     if(top == -1)
@@ -108,10 +106,11 @@ void display()
         printf("Stack is Empty");
         return;
     }
-}
+
     printf("Stack Elements are :");
     int i;
     for(i = top; i >= 0; i--)
     {
         printf("%d\n", stack[i]);
     }
+}
