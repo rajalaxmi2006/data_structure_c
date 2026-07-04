@@ -96,7 +96,7 @@ void peek()
     }
     else
     {
-        return stack[top];
+        printf("Top elements = %d\n" , stack[top]);
     }
 }
 void display()
