@@ -8,7 +8,7 @@ int front = -1, rear = -1;
 
 // 1. Enqueue
 void enqueue(int data) {
-    if(front==(rear+1) % SIZE) {
+    if(front == ( rear + 1 ) % SIZE) {
         printf("Overflow: Queue is Full\n");
         return;
     }
@@ -50,7 +50,7 @@ void traverse() {
     }
 
     printf("Queue elements: ");
-    for(i = front; ; i=(i+1)SIZE) {
+    for(i = front; ; i=(i+1) % SIZE) {
         printf("%d ", Q[i]);
         if (i==rear)
             break;
