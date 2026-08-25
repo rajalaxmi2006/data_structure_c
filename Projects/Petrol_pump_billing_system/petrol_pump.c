@@ -33,4 +33,6 @@ int main()
     printf("GST(18%) : %.2f\n" , gst);
     printf("=====================");
     printf("Total Bill : %.2f\n ", final);
+
+    
 }
